@@ -1,0 +1,558 @@
+A Brief Documentation on
+A Lisp Driver to be embedded in Java Applications
+
+by Taiichi Yuasa
+
+1. To use this system as a stand-alone Scheme system:
+
+	% java Eval
+	>(cons 1 2)
+	(1 . 2)
+	
+	>^D
+	Sayonara
+	%
+
+
+2. To use this system when embedded in Java applicaions, in a typical case:
+
+	(1) Initialize the system:
+
+		Eval.initializeSystem();
+
+	(2) Load your Scheme program by supplying the file name string:
+
+		Eval.loadProgram(file-name);
+
+	(3) Run your program by supplying a string for an S-expression:
+
+		Object value = Eval.runProgram(S-expression);
+
+
+3. First-class objects and implementation classes
+
+	Those marked with '+' are newly defined classes.
+
+	-----------------------------------------------------------------------
+	Object
+		Boolean
+	    Number
+	    	Integer (as fixnums)
+	    	BigInteger (as bignums)
+	    	Double
+	+	Symbol
+		Character
+		String
+	+	List (conses and the empty list)
+	+		Pair (conses)
+		Object[] (as vectors)
+	+	Function (is interface)
+	+		Subr (built-in functions written in Java)
+	+		Lambda (lambda closures)
+	+		Contin (continuations, extends RuntimeException)
+		Writer (as output ports)
+			BufferedWriter (as output ports other than string output ports)
+			StringWriter (as string output ports)
+		PushbackReader (as input ports)
+	+	Misc (including the eof-object)
+	-----------------------------------------------------------------------
+
+
+4. More implementation classes
+
+	Char: functions on characters and strings
+	Env:  lexical environments
+	Eval: the Evaluator and most special forms
+	IO:   I/O functions
+	Num:  arithmetic functions
+
+
+5. List of built-in functions and special forms in alphabetic order
+
+	Those marked with '+' are extensions to IEEE Scheme.
+
+	-----------------------------------------------------------------------
+		*
+		+
+		-
+		/
+	+	1+
+	+	1-
+		<
+		<=
+		=
+		>
+		>=
+		abs
+		acos
+		and
+		append
+		apply
+		asin
+		assoc
+		assq
+		assv
+		atan
+		begin
+		boolean?
+		caaaar
+		caaadr
+		caaar
+		caadar
+		caaddr
+		caadr
+		caar
+		cadaar
+		cadadr
+		cadar
+		caddar
+		cadddr
+		caddr
+		cadr
+		call-with-current-continuation (downward only)
+		call-with-input-file
+		call-with-output-file
+	+	call/cc
+		car
+		case
+		cdaaar
+		cdaadr
+		cdaar
+		cdadar
+		cdaddr
+		cdadr
+		cdar
+		cddaar
+		cddadr
+		cddar
+		cdddar
+		cddddr
+		cdddr
+		cddr
+		cdr
+		ceiling
+		char->integer
+		char-alphabetic?
+		char-ci<=?
+		char-ci<?
+		char-ci=?
+		char-ci>=?
+		char-ci>?
+		char-downcase
+		char-lower-case?
+		char-numeric?
+	+	char-ready?
+		char-upcase
+		char-upper-case?
+		char-whitespace?
+		char<=?
+		char<?
+		char=?
+		char>=?
+		char>?
+		char?
+		close-input-port
+		close-output-port
+		cond
+		cons
+	+	console-input-port
+	+	console-output-port
+		cos
+		current-input-port
+		current-output-port
+		define
+		display
+		do
+		eof-object?
+		eq?
+		equal?
+		eqv?
+		even?
+		exp
+		expt
+	+	file-exists?
+		floor
+	+	flush-port
+		for-each
+	+	gbc
+		gcd
+	+	gensym
+	+	get
+	+	get-output-string
+		if
+		input-port?
+		integer->char
+		integer?
+		lambda
+	+	last
+		lcm
+		length
+		let
+		let*
+		letrec
+		list
+	+	list*
+	+	list->string
+	+	list->vector
+		list-ref
+		list?
+	+	load
+		log
+	+	logand
+	+	logior
+	+	lognot
+	+	logshl
+	+	logshr
+	+	logxor
+		make-string
+		make-vector
+		map
+		max
+		member
+		memq
+		memv
+		min
+		modulo
+	+	nconc
+		negative?
+		newline
+		not
+	+	nreverse
+	+	nthcdr
+		null?
+		number->string
+		number?
+		odd?
+		open-input-file
+	+	open-input-string
+		open-output-file
+	+	open-output-string
+		or
+		output-port?
+		pair?
+		peek-char
+		positive?
+		procedure?
+	+	put
+		quasiquote
+		quote
+		quotient
+	+	random
+		read
+		read-char
+		remainder
+	+	reset-output-string
+		reverse
+		round
+		set!
+		set-car!
+		set-cdr!
+		sin
+		sqrt
+		string
+	+	string->list
+		string->number
+		string->symbol
+		string-append
+		string-ci<=?
+		string-ci<?
+		string-ci=?
+		string-ci>=?
+		string-ci>?
+		string-length
+		string-ref
+		string<=?
+		string<?
+		string=?
+		string>=?
+		string>?
+		string?
+		substring
+		symbol->string
+		symbol?
+		tan
+	+	time
+	+	trace
+		truncate
+	+	untrace
+		vector
+		vector-length
+		vector-ref
+		vector-set!
+	+	vector->list
+		vector?
+	+	with-input-from-port
+	+	with-output-to-port
+		write
+		write-char
+		zero?
+	-----------------------------------------------------------------------
+
+
+6. List of unsupported IEEE Scheme functions in alphabetic order
+
+	-----------------------------------------------------------------------
+	angle
+	complex?
+	denominator
+	exact->inexact
+	exact?
+	imag-part
+	inexact->exact
+	inexact?
+	magnitude
+	make-polar
+	make-rectangular
+	numerator
+	rational?
+	rationalize
+	real?
+	real-part
+	string-set!
+	-----------------------------------------------------------------------
+
+
+7. Argument and return types of built-in functions and special forms
+
+	The following syntactic notations are used:
+
+	    {X}*    zero or more X's
+	    {X}+    one or more X's
+	    [X]     optional X
+
+	-----------------------------------------------------------------------
+	* : ({Number num}*) -> Number
+	+ : ({Number num}*) -> Number
+	- : ({Number num}+) -> Number
+	/ : ({Number num}+) -> Number
+	1+ : (Number num) -> Number
+	1- : (Number num) -> Number
+	< : ({Number num}+) -> Boolean
+	<= : ({Number num}+) -> Boolean
+	= : ({Number num}+) -> Boolean
+	> : ({Number num}+) -> Boolean
+	>= : ({Number num}+) -> Boolean
+	abs : (Number num) -> Number
+	acos : (Number num) -> Double
+	and : ({Object arg}*) -> Object
+	append : ({List arg}*, Object last) -> Object
+	apply : (Function f, {Object arg}*, List last) -> Object
+	asin : (Number num) -> Double
+	assoc : (Object obj, List alist) -> Object
+	assq : (Object obj, List alist) -> Object
+	assv : (Object obj, List alist) -> Object
+	atan : (Number num1, [Number num2]) -> Double
+	begin : ({Object expr}*) -> Object
+	boolean? : (Object obj) -> Boolean
+	caaaar : (List x) -> Object
+	caaadr : (List x) -> Object
+	caaar : (List x) -> Object
+	caadar : (List x) -> Object
+	caaddr : (List x) -> Object
+	caadr : (List x) -> Object
+	caar : (List x) -> Object
+	cadaar : (List x) -> Object
+	cadadr : (List x) -> Object
+	cadar : (List x) -> Object
+	caddar : (List x) -> Object
+	cadddr : (List x) -> Object
+	caddr : (List x) -> Object
+	cadr : (List x) -> Object
+	call-with-current-continuation : (Function fun) -> Object
+	call-with-input-file : (String s, [String encoding], Function f) -> Object
+	call-with-output-file : (String s, [String encoding], Function f) -> Object
+	call/cc : (Function fun) -> Object
+	car : (List x) -> Object
+	case : (Object expr, {List clause}+) -> Object
+	cdaaar : (List x) -> Object
+	cdaadr : (List x) -> Object
+	cdaar : (List x) -> Object
+	cdadar : (List x) -> Object
+	cdaddr : (List x) -> Object
+	cdadr : (List x) -> Object
+	cdar : (List x) -> Object
+	cddaar : (List x) -> Object
+	cddadr : (List x) -> Object
+	cddar : (List x) -> Object
+	cdddar : (List x) -> Object
+	cddddr : (List x) -> Object
+	cdddr : (List x) -> Object
+	cddr : (List x) -> Object
+	cdr : (List x) -> Object
+	ceiling : (Number num) -> Number
+	char->integer : (Character c) -> Integer
+	char-alphabetic? : (Character c) -> Boolean
+	char-ci<=? : (Character c1, Character c2) -> Boolean
+	char-ci<? : (Character c1, Character c2) -> Boolean
+	char-ci=? : (Character c1, Character c2) -> Boolean
+	char-ci>=? : (Character c1, Character c2) -> Boolean
+	char-ci>? : (Character c1, Character c2) -> Boolean
+	char-downcase : (Character c) -> Character
+	char-lower-case? : (Character c) -> Boolean
+	char-numeric? : (Character c) -> Boolean
+	char-ready? : ([InputPort in]) -> Boolean
+	char-upcase : (Character c) -> Character
+	char-upper-case? : (Character c) -> Boolean
+	char-whitespace? : (Character c) -> Boolean
+	char<=? : (Character c1, Character c2) -> Boolean
+	char<? : (Character c1, Character c2) -> Boolean
+	char=? : (Character c1, Character c2) -> Boolean
+	char>=? : (Character c1, Character c2) -> Boolean
+	char>? : (Character c1, Character c2) -> Boolean
+	char? : (Object obj) -> Boolean
+	close-input-port : (InputPort in) -> Boolean
+	close-output-port : (OutputPort out) -> Boolean
+	cond : ({List clause}+) -> Object
+	cons : (Object x, Object y) -> Pair
+	console-input-port : ([String encoding]) -> InputPort
+	console-output-port : ([String encoding]) -> OutputPort
+	cos : (Number num) -> Double
+	current-input-port : () -> InputPort
+	current-output-port : () -> OutputPort
+	define : (Symbol sym, Object expr) -> Symbol
+	define : (Pair name, {Object expr}*) -> Symbol
+	display : (Object x, [OutputPort out]) -> Object
+	do : (List bindings, List post, {Object expr}*) -> Object
+	eof-object? : (Object obj) -> Boolean
+	eq? : (Object obj1, Object obj2) -> Boolean
+	equal? : (Object obj1, Object obj2) -> Boolean
+	eqv? : (Object obj1, Object obj2) -> Boolean
+	even? : (Number num) -> Boolean
+	exp : (Number num) -> Double
+	expt : (Number num1, Number num2) -> Number
+	file-exists? : (String s) -> Boolean
+	floor : (Number num) -> Number
+	flush-port : ([OutputPort out]) -> Boolean
+	for-each : (Function f, {List list}+) -> List
+	gbc : () -> Boolean
+	gcd : ({Number num}*) -> Number
+	gensym : () -> Symbol
+	get : (Symbol sym, Object key) -> Object
+	get-output-string : (StringOutputPort sw) -> String
+	if : (Object cond, Object e1, [Object e2]) -> Object
+	input-port? : (Object obj) -> Boolean
+	integer->char : (Integer n) -> Character
+	integer? : (Object obj) -> Boolean
+	lambda : (Object params, {Object expr}*) -> Function
+	last : (List x) -> List
+	lcm : ({Number num}*) -> Number
+	length : (List x) -> Integer
+	let : ([Symbol name], List bindings, {Object expr}*) -> Object
+	let* : (List bindings, {Object expr}*) -> Object
+	letrec : (List bindings, {Object expr}*) -> Object
+	list : ({Object arg}*) -> Object
+	list* : ({Object arg}+) -> Object
+	list->string : (List list) -> String
+	list->vector : (List list) -> Vector
+	list-ref : (List x, Integer n) -> Object
+	list? : (Object obj) -> Boolean
+	load : (String s, [String encoding, [Boolean verbose]]) -> String
+	log : (Number num) -> Double
+	logand : ({Number num}*) -> Number
+	logior : ({Number num}*) -> Number
+	lognot : (Number num) -> Number
+	logshl : (Number num, Integer n) -> Number
+	logshr : (Number num, Integer n) -> Number
+	logxor : ({Number num}*) -> Number
+	make-string : (Integer length, [Character fill]) -> String
+	make-vector : (Integer length, [Object fill]) -> Vector
+	map : (Function f, {List list}+) -> List
+	max : ({Number num}+) -> Number
+	member : (Object obj, List list) -> Object
+	memq : (Object obj, List list) -> Object
+	memv : (Object obj, List list) -> Object
+	min : ({Number num}+) -> Number
+	modulo : (Number num1, Number num2) -> Number
+	nconc : ({List arg}*, Object last) -> Object
+	negative? : (Number num) -> Boolean
+	newline : ([OutputPort out]) -> Boolean
+	not : (Object obj) -> Boolean
+	nreverse : (List arg) -> List
+	nthcdr : (Integer n, List x) -> Object
+	null? : (Object obj) -> Boolean
+	number->string : (Number num, [Integer radix]) -> String
+	number? : (Object obj) -> Boolean
+	odd? : (Number num) -> Boolean
+	open-input-file : (String name, [String encoding]) -> InputPort
+	open-input-string : (String s) -> InputPort
+	open-output-file : (String name, [String encoding]) -> OutputPort
+	open-output-string : () -> StringOutputPort
+	or : ({Object arg}*) -> Object
+	output-port? : (Object obj) -> Boolean
+	pair? : (Object obj) -> Boolean
+	peek-char : ([InputPort in]) -> Object
+	positive? : (Number num) -> Boolean
+	procedure? : (Object obj) -> Boolean
+	put : (Symbol sym, Object key, Object val) -> Object
+	quasiquote : (Object obj) -> Object
+	quote : (Object obj) -> Object
+	quotient : (Number num1, Number num2) -> Number
+	random : ([Number num]) -> Number
+	read : ([InputPort in]) -> Object
+	read-char : ([InputPort in]) -> Object
+	remainder : (Number num1, Number num2) -> Number
+	reset-output-string : (StringOutputPort sw) -> StringOutputPort
+	reverse : (List arg) -> List
+	round : (Number num) -> Number
+	set! : (Symbol sym, Object expr) -> Object
+	set-car! : (Pair x, Object val) -> Object
+	set-cdr! : (Pair x, Object val) -> Object
+	sin : (Number num) -> Double
+	sqrt : (Number num) -> Double
+	string : ({Character arg}*) -> String
+	string->list : (String s) -> List
+	string->number : (String s, [Integer radix]) -> Object
+	string->symbol : (String s) -> Symbol
+	string-append : ({String s}*) -> String
+	string-ci<=? : (String s1, String s2) -> Boolean
+	string-ci<? : (String s1, String s2) -> Boolean
+	string-ci=? : (String s1, String s2) -> Boolean
+	string-ci>=? : (String s1, String s2) -> Boolean
+	string-ci>? : (String s1, String s2) -> Boolean
+	string-length : (String s) -> Integer
+	string-ref : (String s, Integer index) -> Character
+	string<=? : (String s1, String s2) -> Boolean
+	string<? : (String s1, String s2) -> Boolean
+	string=? : (String s1, String s2) -> Boolean
+	string>=? : (String s1, String s2) -> Boolean
+	string>? : (String s1, String s2) -> Boolean
+	string? : (Object obj) -> Boolean
+	substring : (String s, Integer from, [Integer to]) -> String
+	symbol->string : (Symbol sym) -> String
+	symbol? : (Object obj) -> Boolean
+	tan : (Number num) -> Double
+	time : (Object expr) -> Object
+	trace : ({Symbol sym}*) -> List
+	truncate : (Number num) -> Number
+	untrace : ({Symbol sym}*) -> List
+	vector : ({Object arg}*) -> Vector
+	vector->list : (Vector v) -> List
+	vector-length : (Vector v) -> Integer
+	vector-ref : (Vector v, Integer index) -> Object
+	vector-set! : (Vector v, Integer index, Object val) -> Object
+	vector? : (Object obj) -> Boolean
+	with-input-from-port : (InputPort in, Function f) -> Object
+	with-output-to-port : (OutputPort out, Function f) -> Object
+	write : (Object x, [OutputPort out]) -> Object
+	write-char : (Character x, [OutputPort out]) -> Character
+	zero? : (Number num) -> Boolean
+	-----------------------------------------------------------------------
+
+// The contents of this file are subject to the Mozilla Public License
+// Version 1.0 (the "License"); you may not use this file except in
+// compliance with the License. You may obtain a copy of the License at
+// http://www.mozilla.org/MPL/
+//
+// Software distributed under the License is distributed on an "AS IS"
+// basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+// License for the specific language governing rights and limitations
+// under the License.
+//
+// The Original Code is JAKLD code, released November 26, 2002.
+//
+// The Initial Developer of the Original Code is Taiichi Yuasa.
+// Portions created by Taiichi Yuasa are Copyright (C) 2002
+// Taiichi Yuasa. All Rights Reserved.
+//
+// Contributor(s): Taiichi Yuasa <yuasa@kuis.kyoto-u.ac.jp>
+
